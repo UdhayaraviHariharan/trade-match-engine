@@ -25,6 +25,14 @@ public class TradeMatchEngineController {
         this.tradeService = tradeService;
     }
 
+    /**
+     *  Api to create financial instrument
+     * @param instrumentId instrumentId for the financial instrument
+     * @param symbol symbol  for the financial instrument
+     * @param price price  for the financial instrument
+     * @return ApiResponse with success or failure
+     * @throws TradeMatchEngineApplicationException throws exception if any error in creation of financial instrument
+     */
 
     @PostMapping("/instrument")
     public ResponseEntity<ApiResponse> createFinancialInstrument(@RequestParam("instrumentId") String instrumentId, @RequestParam("symbol") String symbol, @RequestParam("price") double price ) throws TradeMatchEngineApplicationException {

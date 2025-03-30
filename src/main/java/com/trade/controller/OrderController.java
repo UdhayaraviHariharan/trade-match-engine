@@ -33,6 +33,17 @@ public class OrderController {
     }
 
 
+    /**
+     *  API to create an order and match with a trade if matches
+     * @param orderId orderId of the order to be created
+     * @param traderId traderId of the order to be created
+     * @param orderType orderType of the order to be created
+     * @param instrumentId instrumentId of the order to be created
+     * @param price price of the order to be created
+     * @param quantity quantity of the order to be created
+     * @return ApiResponse with success or failure
+     * @throws TradeMatchEngineApplicationException throws exception if any error in creation of financial instrument
+     */
     @PostMapping()
     public ResponseEntity<ApiResponse> createOrder(@RequestParam("orderId") String orderId, @RequestParam("traderId") String traderId,
                                                    @RequestParam("orderType") OrderType orderType, @RequestParam("instrumentId") String instrumentId,
@@ -49,6 +60,22 @@ public class OrderController {
         }
         catch (Exception e){
             String errorMessage = format("Exception [%s] occurred while adding order", e.getMessage());
+            return  new ResponseEntity<>(new ApiResponse(errorMessage), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/cancel")
+    public ResponseEntity<ApiResponse> cancelOrder(@RequestParam("orderId") String orderId, @RequestParam("instrumentId") String instrumentId) throws TradeMatchEngineApplicationException {
+        try{
+            orderService.cancelOrder(orderId, instrumentId);
+
+            return new ResponseEntity<>(new ApiResponse("Order cancelled successfully."), HttpStatus.CREATED);
+        }
+        catch (TradeMatchEngineServiceException e){
+            return new ResponseEntity<>(new ApiResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception e){
+            String errorMessage = format("Exception [%s] occurred while cancelling order", e.getMessage());
             return  new ResponseEntity<>(new ApiResponse(errorMessage), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
