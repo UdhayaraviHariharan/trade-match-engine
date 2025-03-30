@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 import static java.lang.String.format;
 
 /**
- * Test controller for interview review sake.
+ * Test controller
  */
 @RestController
 @RequestMapping("/trade-engine/test")
@@ -40,8 +40,8 @@ public class TestController {
     @GetMapping()
     public ResponseEntity<ApiResponse> createOrder() throws TradeMatchEngineApplicationException {
         try{
-            logger.info("Adding financial Instrument with Inst ID = INST001 & Symbol : VEGA & MarkerPrice : 100");
-            FinancialInstrument financialInstrument = new FinancialInstrument("INST001", "VEGA", 100.0);
+            logger.info("Adding financial Instrument with Inst ID = INST001 & Symbol : EG  & MarkerPrice : 100");
+            FinancialInstrument financialInstrument = new FinancialInstrument("INST001", "EG", 100.0);
             tradeService.addFinancialInstrument(financialInstrument);
 
             logger.info("FinancialInstrument added Successfully");
