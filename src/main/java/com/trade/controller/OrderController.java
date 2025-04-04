@@ -47,9 +47,9 @@ public class OrderController {
     @PostMapping()
     public ResponseEntity<ApiResponse> createOrder(@RequestParam("traderId") String traderId,
                                                    @RequestParam("orderType") OrderType orderType, @RequestParam("instrumentId") String instrumentId,
-                                                   @RequestParam("price") String price, @RequestParam("quantity") String quantity) throws TradeMatchEngineApplicationException {
+                                                   @RequestParam("price") Double price, @RequestParam("quantity") long quantity) throws TradeMatchEngineApplicationException {
         try{
-            Order order = new Order(traderId, instrumentId, orderType, Double.parseDouble(price), Integer.parseInt(quantity));
+            Order order = new Order(traderId, instrumentId, orderType, price, quantity);
 
             orderService.addOrder(order);
 

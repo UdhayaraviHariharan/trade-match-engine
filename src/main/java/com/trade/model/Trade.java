@@ -6,12 +6,12 @@ public class Trade {
     private final int buyOrderId;
     private final int sellOrderId;
     private final double price;
-    private final int quantity;
+    private final long quantity;
     private final String instrumentId;
     private String timestamp ;
 
 
-    public Trade(int buyOrderId, int sellOrderId, double price, int quantity, String instrumentId) {
+    public Trade(int buyOrderId, int sellOrderId, double price, long quantity, String instrumentId) {
         this.buyOrderId = buyOrderId;
         this.sellOrderId = sellOrderId;
         this.price = price;
@@ -32,7 +32,7 @@ public class Trade {
     public double getPrice() {
         return price;
     }
-    public int getQuantity() {
+    public long getQuantity() {
         return quantity;
     }
     public String getTimestamp() {

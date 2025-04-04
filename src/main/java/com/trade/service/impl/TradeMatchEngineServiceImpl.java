@@ -16,23 +16,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.PriorityBlockingQueue;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
 @Service
 public class TradeMatchEngineServiceImpl implements OrderService, TradeService {
-    private Map<String, FinancialInstrument> financialInstruments = new HashMap<>();
+    private final Map<String, FinancialInstrument> financialInstruments = new ConcurrentHashMap<>();
     private List<Trade> processedTrades = new ArrayList<>();
-    private PriorityQueue<Order> buyOrders = new PriorityQueue<>((a, b) -> Double.compare(b.getPrice(), a.getPrice()));
-    private PriorityQueue<Order> sellOrders = new PriorityQueue<>(Comparator.comparingDouble(Order::getPrice));
+    private final PriorityBlockingQueue<Order> buyOrders = new PriorityBlockingQueue<>();
+    private final PriorityBlockingQueue<Order> sellOrders = new PriorityBlockingQueue<>();
 
 
     /**
      * @see OrderService#addOrder(Order)
      */
     @Override
-    public void addOrder(Order order) throws TradeMatchEngineApplicationException {
+    public synchronized void addOrder(Order order) throws TradeMatchEngineApplicationException {
         try {
             if (!financialInstruments.containsKey(order.getInstrumentId())) {
                 // Assumption
@@ -57,7 +59,7 @@ public class TradeMatchEngineServiceImpl implements OrderService, TradeService {
         }
     }
 
-    private void executeTrade(String instrumentId) {
+    private synchronized void executeTrade(String instrumentId) {
         FinancialInstrument financialInstrument = financialInstruments.get(instrumentId);
 
         while (!buyOrders.isEmpty() && !sellOrders.isEmpty()) {
@@ -66,7 +68,9 @@ public class TradeMatchEngineServiceImpl implements OrderService, TradeService {
 
             if (bestBuy.getPrice() >= bestSell.getPrice()) {
                 double tradePrice = bestSell.getPrice();
-                int tradeQuantity = Math.min(bestBuy.getQuantity(), bestSell.getQuantity());
+                // This can solve the case where the order quantities dont match
+                // so we can do partial order filling and
+                long tradeQuantity = Math.min(bestBuy.getQuantity(), bestSell.getQuantity());
 
                 Trade trade = new Trade(bestBuy.getOrderId(), bestSell.getOrderId(), tradePrice, tradeQuantity, instrumentId);
                 processedTrades.add(trade);
@@ -89,7 +93,7 @@ public class TradeMatchEngineServiceImpl implements OrderService, TradeService {
         }
     }
 
-    private void updateInstrumentMarketPrice(FinancialInstrument financialInstrument, PriorityQueue<Order> buyOrders, PriorityQueue<Order> sellOrders) {
+    private void updateInstrumentMarketPrice(FinancialInstrument financialInstrument, PriorityBlockingQueue<Order> buyOrders, PriorityBlockingQueue<Order> sellOrders) {
         if (!buyOrders.isEmpty() && !sellOrders.isEmpty()) {
             financialInstrument.setMarketPrice((buyOrders.peek().getPrice() + sellOrders.peek().getPrice()) / 2.0);
         } else if (!buyOrders.isEmpty()) {
@@ -103,7 +107,7 @@ public class TradeMatchEngineServiceImpl implements OrderService, TradeService {
 
 
     @Override
-    public void cancelOrder(int orderId, String instrumentId) throws TradeMatchEngineApplicationException {
+    public synchronized void cancelOrder(int orderId, String instrumentId) throws TradeMatchEngineApplicationException {
         try {
             buyOrders.removeIf(order -> order.getOrderId() == orderId && order.getInstrumentId().equals(instrumentId));
             sellOrders.removeIf(order -> order.getOrderId() == orderId && order.getInstrumentId().equals(instrumentId));
