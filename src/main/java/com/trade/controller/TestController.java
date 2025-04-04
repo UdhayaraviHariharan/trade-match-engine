@@ -40,6 +40,7 @@ public class TestController {
     @GetMapping()
     public ResponseEntity<ApiResponse> createOrder() throws TradeMatchEngineApplicationException {
         try{
+
             logger.info("Adding financial Instrument with Inst ID = INST001 & Symbol : EG  & MarkerPrice : 100");
             FinancialInstrument financialInstrument = new FinancialInstrument("INST001", "EG", 100.0);
             tradeService.addFinancialInstrument(financialInstrument);

@@ -12,7 +12,7 @@ public class Order implements Comparable<Order>{
     //This is not set to final because we can alter the quantity of an order based on match up between buy and sell orders.
     private long quantity;
 
-    public Order(String traderId, String instrumentId, OrderType type, Double price, long quantity) {
+    public Order(String traderId, String instrumentId, OrderType type, double price, long quantity) {
         //EdgeCase 1
         if(price <= 0 || quantity <= 0) {
             throw new IllegalArgumentException("Price and Quantity Must be positive");

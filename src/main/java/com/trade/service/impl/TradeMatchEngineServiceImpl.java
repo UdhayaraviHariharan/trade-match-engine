@@ -25,16 +25,22 @@ import static java.lang.String.format;
 @Service
 public class TradeMatchEngineServiceImpl implements OrderService, TradeService {
     private final Map<String, FinancialInstrument> financialInstruments = new ConcurrentHashMap<>();
-    private List<Trade> processedTrades = new ArrayList<>();
     private final PriorityBlockingQueue<Order> buyOrders = new PriorityBlockingQueue<>();
     private final PriorityBlockingQueue<Order> sellOrders = new PriorityBlockingQueue<>();
+    private final List<Trade> processedTrades = new ArrayList<>();
 
+    // For simplicity purposes, defaulted to a static value. We can have this set when creating a trade match engine
+    private static final int ORDER_BOOK_LIMIT = 100;
 
     /**
      * @see OrderService#addOrder(Order)
      */
     @Override
     public synchronized void addOrder(Order order) throws TradeMatchEngineApplicationException {
+        // To help prevent orders overflow
+        if(buyOrders.size() + sellOrders.size() >= ORDER_BOOK_LIMIT) {
+            throw new TradeMatchEngineApplicationException("Order Limit Exceeded");
+        }
         try {
             if (!financialInstruments.containsKey(order.getInstrumentId())) {
                 // Assumption
@@ -54,7 +60,7 @@ public class TradeMatchEngineServiceImpl implements OrderService, TradeService {
         } catch (TradeMatchEngineServiceException e) {
             throw e;
         } catch (Exception e) {
-            String errorMessage = format("Exception [%s] occured while adding order [%s]", e.getMessage(), order);
+            String errorMessage = format("Exception [%s] occurred while adding order [%s]", e.getMessage(), order);
             throw new TradeMatchEngineApplicationException(errorMessage);
         }
     }
