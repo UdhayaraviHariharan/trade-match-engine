@@ -97,7 +97,7 @@ class TradeMatchEngineServiceImplTest {
 
         TradeMatchEngineApplicationException  exception = null;
         try{
-            tradeMatchEngineService.addOrder(new Order("order", "traderId", "insId", OrderType.BUY, Math.random(), 22));
+            tradeMatchEngineService.addOrder(new Order( "traderId", "insId", OrderType.BUY, Math.random(), 22));
         }
         catch(TradeMatchEngineApplicationException e){
             exception = e;
@@ -110,7 +110,7 @@ class TradeMatchEngineServiceImplTest {
 
     private Order createOrders(OrderType orderType)  {
         int randomNumber = (int) (Math.random() * 100);
-        return new Order("order"+randomNumber, "traderId"+randomNumber, INSTRUMENT_ID, orderType, 100.0, 10);
+        return new Order("traderId"+randomNumber, INSTRUMENT_ID, orderType, 100.0, 10);
     }
 }
 
