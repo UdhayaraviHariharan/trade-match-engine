@@ -3,15 +3,15 @@ package com.trade.model;
 import java.util.Date;
 
 public class Trade {
-    private final String buyOrderId;
-    private final String sellOrderId;
+    private final int buyOrderId;
+    private final int sellOrderId;
     private final double price;
     private final int quantity;
     private final String instrumentId;
     private String timestamp ;
 
 
-    public Trade(String buyOrderId, String sellOrderId, double price, int quantity, String instrumentId) {
+    public Trade(int buyOrderId, int sellOrderId, double price, int quantity, String instrumentId) {
         this.buyOrderId = buyOrderId;
         this.sellOrderId = sellOrderId;
         this.price = price;
@@ -23,10 +23,10 @@ public class Trade {
     public String getInstrumentId() {
         return instrumentId;
     }
-    public String getBuyOrderId() {
+    public int getBuyOrderId() {
         return buyOrderId;
     }
-    public String getSellOrderId() {
+    public int getSellOrderId() {
         return sellOrderId;
     }
     public double getPrice() {
@@ -34,5 +34,8 @@ public class Trade {
     }
     public int getQuantity() {
         return quantity;
+    }
+    public String getTimestamp() {
+        return timestamp;
     }
 }

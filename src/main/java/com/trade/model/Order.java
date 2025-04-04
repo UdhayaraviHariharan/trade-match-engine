@@ -1,7 +1,10 @@
 package com.trade.model;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Order {
-    private final String orderId;
+    private static final AtomicInteger orderIdGenerator = new AtomicInteger(0);
+    private final int orderId;
     private final String traderId;
     private final OrderType orderType;
     private final String instrumentId;
@@ -9,8 +12,8 @@ public class Order {
     //This is not set to final because we can alter the quantity of an order based on match up between buy and sell orders.
     private int quantity;
 
-    public Order(String orderId, String traderId, String instrumentId, OrderType type, Double price, int quantity) {
-        this.orderId = orderId;
+    public Order(String traderId, String instrumentId, OrderType type, Double price, int quantity) {
+        this.orderId = orderIdGenerator.incrementAndGet();
         this.traderId = traderId;
         this.instrumentId = instrumentId;
         this.orderType = type;
@@ -18,7 +21,7 @@ public class Order {
         this.quantity = quantity;
     }
 
-    public String getOrderId() {
+    public int getOrderId() {
         return orderId;
     }
 

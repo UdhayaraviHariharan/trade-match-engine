@@ -47,19 +47,19 @@ public class TestController {
             logger.info("FinancialInstrument added Successfully");
 
             logger.info("\n Adding Buy Order 1 - Type : BUY , Price : 150, Quantity : 10");
-            Order buyOrder1 = new Order("orderId1", "traderId1", financialInstrument.getInstrumentId(), OrderType.BUY, 150.0, 10);
+            Order buyOrder1 = new Order( "traderId1", financialInstrument.getInstrumentId(), OrderType.BUY, 150.0, 10);
             orderService.addOrder(buyOrder1);
 
             logger.info("\n Adding Buy Order 2 - Type : BUY , Price : 170, Quantity : 10");
-            Order buyOrder2 = new Order("orderId2", "traderId1", financialInstrument.getInstrumentId(), OrderType.BUY, 170.0, 10);
+            Order buyOrder2 = new Order( "traderId1", financialInstrument.getInstrumentId(), OrderType.BUY, 170.0, 10);
             orderService.addOrder(buyOrder2);
 
             logger.info("\n Adding Buy Order 3 - Type : BUY , Price : 130, Quantity : 10");
-            Order buyOrder3 = new Order("orderId3", "traderId1", financialInstrument.getInstrumentId(), OrderType.BUY, 130.0, 10);
+            Order buyOrder3 = new Order( "traderId1", financialInstrument.getInstrumentId(), OrderType.BUY, 130.0, 10);
             orderService.addOrder(buyOrder3);
 
             logger.info("\n Adding SELL Order 1- Type : SELL , Price : 120, Quantity : 10");
-            Order sellOrder1 = new Order("orderId4", "traderId1",  financialInstrument.getInstrumentId(), OrderType.SELL, 120.0, 10);
+            Order sellOrder1 = new Order( "traderId1",  financialInstrument.getInstrumentId(), OrderType.SELL, 120.0, 10);
             orderService.addOrder(sellOrder1);
 
             logger.info("Trade has Executed Successfully");
@@ -68,7 +68,7 @@ public class TestController {
 
 
             logger.info("\n Adding SELL Order 1- Type : SELL , Price : 150, Quantity : 10");
-            Order sellOrder2= new Order("orderId5", "traderId1",  financialInstrument.getInstrumentId(), OrderType.SELL, 150.0, 20);
+            Order sellOrder2= new Order( "traderId1",  financialInstrument.getInstrumentId(), OrderType.SELL, 150.0, 20);
             orderService.addOrder(sellOrder2);
 
             trades = tradeService.getTradeByInstrument(financialInstrument.getInstrumentId());

@@ -21,7 +21,7 @@ public interface OrderService {
      * @param instrumentId instrumentId from which the order needs to be removed
      * @throws TradeMatchEngineApplicationException  throws exception if order cancellation failed
      */
-    void cancelOrder(String orderId, String instrumentId) throws TradeMatchEngineApplicationException;
+    void cancelOrder(int orderId, String instrumentId) throws TradeMatchEngineApplicationException;
 
     /**
      * Gets all orders by an order type

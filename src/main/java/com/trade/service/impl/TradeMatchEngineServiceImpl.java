@@ -103,12 +103,12 @@ public class TradeMatchEngineServiceImpl implements OrderService, TradeService {
 
 
     @Override
-    public void cancelOrder(String orderId, String instrumentId) throws TradeMatchEngineApplicationException {
+    public void cancelOrder(int orderId, String instrumentId) throws TradeMatchEngineApplicationException {
         try {
-            buyOrders.removeIf(order -> order.getOrderId().equals(orderId) && order.getInstrumentId().equals(instrumentId));
-            sellOrders.removeIf(order -> order.getOrderId().equals(orderId) && order.getInstrumentId().equals(instrumentId));
+            buyOrders.removeIf(order -> order.getOrderId() == orderId && order.getInstrumentId().equals(instrumentId));
+            sellOrders.removeIf(order -> order.getOrderId() == orderId && order.getInstrumentId().equals(instrumentId));
         } catch (Exception e) {
-            String errorMessage = format("Exception [%s] occured while canceling order [%s]", e.getMessage(), orderId);
+            String errorMessage = format("Exception [%s] occurred while canceling order [%s]", e.getMessage(), orderId);
             throw new TradeMatchEngineApplicationException(errorMessage);
         }
 

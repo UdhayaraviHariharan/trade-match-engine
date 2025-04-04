@@ -45,11 +45,11 @@ public class OrderController {
      * @throws TradeMatchEngineApplicationException throws exception if any error in creation of financial instrument
      */
     @PostMapping()
-    public ResponseEntity<ApiResponse> createOrder(@RequestParam("orderId") String orderId, @RequestParam("traderId") String traderId,
+    public ResponseEntity<ApiResponse> createOrder(@RequestParam("traderId") String traderId,
                                                    @RequestParam("orderType") OrderType orderType, @RequestParam("instrumentId") String instrumentId,
                                                    @RequestParam("price") String price, @RequestParam("quantity") String quantity) throws TradeMatchEngineApplicationException {
         try{
-            Order order = new Order(orderId, traderId, instrumentId, orderType, Double.parseDouble(price), Integer.parseInt(quantity));
+            Order order = new Order(traderId, instrumentId, orderType, Double.parseDouble(price), Integer.parseInt(quantity));
 
             orderService.addOrder(order);
 
@@ -65,7 +65,7 @@ public class OrderController {
     }
 
     @PostMapping("/cancel")
-    public ResponseEntity<ApiResponse> cancelOrder(@RequestParam("orderId") String orderId, @RequestParam("instrumentId") String instrumentId) throws TradeMatchEngineApplicationException {
+    public ResponseEntity<ApiResponse> cancelOrder(@RequestParam("orderId") int orderId, @RequestParam("instrumentId") String instrumentId) throws TradeMatchEngineApplicationException {
         try{
             orderService.cancelOrder(orderId, instrumentId);
 
